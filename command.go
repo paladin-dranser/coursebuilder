@@ -16,26 +16,37 @@ func Execute(course *Course) {
 	flag.Parse()
 
 	taskCmd := flag.NewFlagSet("task", flag.ExitOnError)
-	listFlag := taskCmd.Bool("list", false, "Show list of available tasks")
-	taskNameFlag := taskCmd.String("name", "", "Specify task name")
-	taskDescriptionFlag := taskCmd.Bool("description", false, "Show description of task which name is specified by '--name' flag")
-
 	courseCmd := flag.NewFlagSet("course", flag.ExitOnError)
 
 	if len(os.Args) < 2 {
-		fmt.Fprintf(flag.CommandLine.Output(), "Please specify a subcommand!\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "Please specify a command!\n")
 		flag.Usage()
 		os.Exit(1)
 	}
 
 	switch os.Args[1] {
 	case "course":
+		courseCmd.Usage = func() {
+			fmt.Fprintf(flag.CommandLine.Output(), "\nUsage: %s %s COMMAND [OPTION] [ARG]\n\n", os.Args[0], os.Args[1])
+			fmt.Fprintf(flag.CommandLine.Output(), "Commands:\n")
+			fmt.Fprintf(flag.CommandLine.Output(), "  description:  Show course description\n")
+			fmt.Fprintf(flag.CommandLine.Output(), "  checkout:     Run test cases for all tasks\n")
+
+			fmt.Fprintf(flag.CommandLine.Output(), "\nOptions:\n")
+			courseCmd.VisitAll(func(f *flag.Flag) {
+				fmt.Fprintf(flag.CommandLine.Output(), "  --" + f.Name + " " + f.Usage + "\n")
+			})
+		}
+		// TODO Add description to FlagSet Usage()
+		// TODO Implement 'course' as a FlagSet and use this flag there
+		noAfterwordFlag := courseCmd.Bool("no-afterword", false, "Do not show afterwords")
 		courseCmd.Parse(os.Args[2:])
 
 		args := courseCmd.Args()
 
 		if len(args) < 1 {
-			fmt.Println("ERROR")
+			fmt.Fprintf(flag.CommandLine.Output(), "Please specify a command!\n")
+			courseCmd.Usage()
 			os.Exit(1)
 		}
 
@@ -43,40 +54,55 @@ func Execute(course *Course) {
 			fmt.Println(course.Description)
 			return
 		} else if args[0] == "checkout" {
-			course.Checkout()
-			return 
+			course.Checkout(*noAfterwordFlag)
+			return
 		} else {
-			fmt.Println("ERROR")
+			fmt.Fprintf(flag.CommandLine.Output(), "ERROR: Incorrect command. Please specify an available command!\n")
+			courseCmd.Usage()
 			os.Exit(1)
 		}
 	case "task":
+		taskCmd.Usage = func() {
+			fmt.Fprintf(flag.CommandLine.Output(), "\nUsage: %s %s COMMAND\n\n", os.Args[0], os.Args[1])
+			fmt.Fprintf(flag.CommandLine.Output(), "Commands:\n")
+			fmt.Fprintf(flag.CommandLine.Output(), "  description:  Show task description\n")
+			fmt.Fprintf(flag.CommandLine.Output(), "  list:         Show list of available task names\n")
+		}
 		taskCmd.Parse(os.Args[2:])
-	default:
-		fmt.Println("ERROR: expected 'task' subcommand")
-		os.Exit(1)
-	}
 
-	if *taskDescriptionFlag {
-		if *taskNameFlag == "" {
-			fmt.Println("ERROR: task name must be defined!")
+		args := taskCmd.Args()
+
+		if len(args) < 1 {
+			fmt.Fprintf(flag.CommandLine.Output(), "Please specify a command!\n")
+			taskCmd.Usage()
 			os.Exit(1)
 		}
 
-		for _, task := range course.Tasks {
-			if task.Name() == *taskNameFlag {
-				fmt.Println("Description: " + task.Name() + "\n" + task.Description())
-				return
+		if args[0] == "list" {
+			for _, task := range course.Tasks {
+				fmt.Println(task.Name())
 			}
-		}
+			return
+			// TODO 'description' as 'flagSet' or 'task name' as a flag
+		} else if args[0] == "description" {
+			if len(args) == 1 {
+				fmt.Println("ERROR: Task name is not provided!")
+				os.Exit(1)
+			}
 
-		fmt.Println("ERROR: Task has not been found!")
+			for _, task := range course.Tasks {
+				if task.Name() == args[1] {
+					fmt.Println("Description: " + task.Name() + "\n" + task.Description())
+					return
+				}
+			}
+
+			fmt.Println("ERROR: '" + args[1] + "' task has not been found!")
+
+		}
+	default:
+		fmt.Fprintf(flag.CommandLine.Output(), "ERROR: Incorrect command!\n")
+		flag.Usage()
 		os.Exit(1)
-	}
-
-	if *listFlag {
-		for _, task := range course.Tasks {
-			fmt.Println(task.Name())
-		}
-		return
 	}
 }

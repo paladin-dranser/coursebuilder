@@ -21,12 +21,14 @@ func outputResult(taskName string, testCaseName string, testCaseResult bool, tas
 type Task interface {
 	Name() string
 	Description() string
+	Afterword() string
 	TestCases() []TestCase
 }
 
 type TestCase interface {
 	Name() string
 	Description() string
+	Afterword() string
 	// TODO Return err to use it in debug mode
 	Check() bool
 }
