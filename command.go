@@ -92,7 +92,7 @@ func Execute(course *Course) {
 
 			for _, task := range course.Tasks {
 				if task.Name() == args[1] {
-					fmt.Println("Description: " + task.Name() + "\n" + task.Description())
+					fmt.Println("Task: " + task.Name() + "\n\n" + task.Description())
 					return
 				}
 			}
