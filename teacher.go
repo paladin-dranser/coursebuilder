@@ -29,6 +29,7 @@ type TestCase interface {
 	Name() string
 	Description() string
 	Afterword() string
+	Tip() string
 	// TODO Return err to use it in debug mode
 	Check() bool
 }

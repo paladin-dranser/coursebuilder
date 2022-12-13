@@ -40,6 +40,7 @@ func Execute(course *Course) {
 		// TODO Add description to FlagSet Usage()
 		// TODO Implement 'course' as a FlagSet and use this flag there
 		noAfterwordFlag := courseCmd.Bool("no-afterword", false, "Do not show afterwords")
+		tipsFlag := courseCmd.Bool("tips", false, "Show tips if a test failed")
 		courseCmd.Parse(os.Args[2:])
 
 		args := courseCmd.Args()
@@ -54,7 +55,7 @@ func Execute(course *Course) {
 			fmt.Println(course.Description)
 			return
 		} else if args[0] == "checkout" {
-			course.Checkout(*noAfterwordFlag)
+			course.Checkout(*noAfterwordFlag, *tipsFlag)
 			return
 		} else {
 			fmt.Fprintf(flag.CommandLine.Output(), "ERROR: Incorrect command. Please specify an available command!\n")
