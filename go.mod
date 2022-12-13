@@ -1,3 +1,3 @@
-module github.com/paladin-dranser/course_builder
+module github.com/paladin-dranser/coursebuilder
 
 go 1.19

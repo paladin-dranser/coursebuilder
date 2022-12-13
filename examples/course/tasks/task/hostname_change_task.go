@@ -1,12 +1,12 @@
 package task
 
 import (
-	"github.com/paladin-dranser/course_builder"
+	"github.com/paladin-dranser/coursebuilder"
 )
 
 type hostnameTaskDefinition struct {
 	desiredHostname string
-	testCases       []course_builder.TestCase
+	testCases       []coursebuilder.TestCase
 }
 
 func (t *hostnameTaskDefinition) Name() string {
@@ -21,7 +21,7 @@ func (t *hostnameTaskDefinition) Afterword() string {
 	return "You did it!"
 }
 
-func (t *hostnameTaskDefinition) TestCases() []course_builder.TestCase {
+func (t *hostnameTaskDefinition) TestCases() []coursebuilder.TestCase {
 	return t.testCases
 }
 

@@ -1,4 +1,4 @@
-package course_builder
+package coursebuilder
 
 import (
 	"fmt"
