@@ -30,36 +30,36 @@ func Execute(course *Course) {
 			fmt.Fprintf(flag.CommandLine.Output(), "\nUsage: %s %s COMMAND [OPTION] [ARG]\n\n", os.Args[0], os.Args[1])
 			fmt.Fprintf(flag.CommandLine.Output(), "Commands:\n")
 			fmt.Fprintf(flag.CommandLine.Output(), "  description:  Show course description\n")
-			fmt.Fprintf(flag.CommandLine.Output(), "  checkout:     Run test cases for all tasks\n")
+			fmt.Fprintf(flag.CommandLine.Output(), "  check:        Run test cases for all tasks\n")
 
 			fmt.Fprintf(flag.CommandLine.Output(), "\nOptions:\n")
 			courseCmd.VisitAll(func(f *flag.Flag) {
 				fmt.Fprintf(flag.CommandLine.Output(), "  --"+f.Name+" "+f.Usage+"\n")
 			})
 		}
-		// TODO Add description to FlagSet Usage()
-		// TODO Implement 'course' as a FlagSet and use this flag there
-		noAfterwordFlag := courseCmd.Bool("no-afterword", false, "Do not show afterwords")
-		tipsFlag := courseCmd.Bool("tips", false, "Show tips if a test failed")
+
 		courseCmd.Parse(os.Args[2:])
+		checkoutCmd := flag.NewFlagSet("check", flag.ExitOnError)
 
-		args := courseCmd.Args()
-
-		if len(args) < 1 {
-			fmt.Fprintf(flag.CommandLine.Output(), "Please specify a command!\n")
-			courseCmd.Usage()
-			os.Exit(1)
-		}
-
-		if args[0] == "description" {
+		switch os.Args[2] {
+		case "description":
 			fmt.Println(course.Description)
 			return
-		} else if args[0] == "checkout" {
-			course.Checkout(*noAfterwordFlag, *tipsFlag)
-			return
-		} else {
-			fmt.Fprintf(flag.CommandLine.Output(), "ERROR: Incorrect command. Please specify an available command!\n")
-			courseCmd.Usage()
+		case "check":
+			checkoutCmd.Usage = func() {
+				fmt.Fprintf(flag.CommandLine.Output(), "\nUsage: %s %s %s COMMAND [OPTION] [ARG]\n\n", os.Args[0], os.Args[1], os.Args[2])
+				fmt.Fprintf(flag.CommandLine.Output(), "\nOptions:\n")
+				checkoutCmd.VisitAll(func(f *flag.Flag) {
+					fmt.Fprintf(flag.CommandLine.Output(), "  --"+f.Name+" "+f.Usage+"\n")
+				})
+			}
+			afterwordFlag := checkoutCmd.Bool("afterword", false, "Shows afterwords if a test or task passed")
+			tipsFlag := checkoutCmd.Bool("tips", false, "Show tips if a test failed")
+			checkoutCmd.Parse(os.Args[3:])
+
+			course.Check(*afterwordFlag, *tipsFlag)
+		default:
+			fmt.Fprintf(flag.CommandLine.Output(), "ERROR: Incorrect command!\n")
 			os.Exit(1)
 		}
 	case "task":

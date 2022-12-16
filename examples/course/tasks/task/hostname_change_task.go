@@ -17,11 +17,10 @@ func (t *hostnameTaskDefinition) Description() string {
 	return "Change hostname of your virtual machine to '" + t.desiredHostname + "'\n"
 }
 
-/* Optional method
+// Optional method
 func (t *hostnameTaskDefinition) Afterword() string {
 	return "You did it!"
 }
-*/
 
 func (t *hostnameTaskDefinition) TestCases() []coursebuilder.TestCase {
 	return t.testCases

@@ -18,7 +18,7 @@ func NewCourse(name string, description string, tasks []Task) *Course {
 	}
 }
 
-func (c *Course) Checkout(noAfterwordFlag bool, tipsFlag bool) {
+func (c *Course) Check(afterwordFlag bool, tipsFlag bool) {
 	fmt.Println("It's time to check what you have done!")
 	fmt.Println("--------------------------------------------------------------------------------")
 	for i, task := range c.Tasks {
@@ -32,7 +32,7 @@ func (c *Course) Checkout(noAfterwordFlag bool, tipsFlag bool) {
 			outputResult(task.Name(), testCase.Name(), testCaseResult, taskSeqNum, testCaseSeqNum)
 
 			if tca, ok := testCase.(Afterword); ok {
-				if noAfterwordFlag == false && testCaseResult {
+				if afterwordFlag && testCaseResult {
 					fmt.Println("Test Case Afterword:\n" + tca.Afterword())
 				}
 			}
@@ -49,7 +49,7 @@ func (c *Course) Checkout(noAfterwordFlag bool, tipsFlag bool) {
 		}
 
 		if ta, ok := task.(Afterword); ok {
-			if noAfterwordFlag == false && taskResult {
+			if afterwordFlag && taskResult {
 				fmt.Println("Task Afterword:\n" + ta.Afterword())
 			}
 		}

@@ -9,33 +9,40 @@ See example of creating a course in `examples` directory.
 Available commands and flags of application may be found using `--help` flag, e.g.:
 
 ```console
-$ go build -o course-builder
 
-$ ./course-builder --help
+$ go build -o course-checker
 
-Usage:  ./course-builder COMMAND
+$ ./course-checker --help
+
+Usage:  ./course-checker COMMAND
 
 Commands:
   course:  Manage a course
   task:    Manage course tasks
 
-$ ./course-builder course --help
+$ ./course-checker course --help
 
-Usage: ./course-builder course COMMAND [OPTION] [ARG]
+Usage: ./course-checker course COMMAND [OPTION] [ARG]
 
 Commands:
   description:  Show course description
-  checkout:     Run test cases for all tasks
+  check:        Run test cases for all tasks
 
 Options:
-  --no-afterword Do not show afterwords
+
+$ ./course-checker course check --help
+
+Usage: ./course-checker course check COMMAND [OPTION] [ARG]
+
+
+Options:
+  --afterword Shows afterwords if a test or task passed
   --tips Show tips if a test failed
 
-$ ./course-builder task --help
+$ ./course-checker task --help
 
-Usage: ./course-builder task COMMAND
+Usage: ./course-checker task COMMAND
 
 Commands:
   description:  Show task description
   list:         Show list of available task names
-```
