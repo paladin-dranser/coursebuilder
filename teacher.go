@@ -21,15 +21,20 @@ func outputResult(taskName string, testCaseName string, testCaseResult bool, tas
 type Task interface {
 	Name() string
 	Description() string
-	Afterword() string
 	TestCases() []TestCase
 }
 
 type TestCase interface {
 	Name() string
 	Description() string
-	Afterword() string
-	Tip() string
 	// TODO Return err to use it in debug mode
 	Check() bool
+}
+
+type Afterword interface {
+	Afterword() string
+}
+
+type Tip interface {
+	Tip() string
 }

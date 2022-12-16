@@ -34,7 +34,7 @@ func Execute(course *Course) {
 
 			fmt.Fprintf(flag.CommandLine.Output(), "\nOptions:\n")
 			courseCmd.VisitAll(func(f *flag.Flag) {
-				fmt.Fprintf(flag.CommandLine.Output(), "  --" + f.Name + " " + f.Usage + "\n")
+				fmt.Fprintf(flag.CommandLine.Output(), "  --"+f.Name+" "+f.Usage+"\n")
 			})
 		}
 		// TODO Add description to FlagSet Usage()

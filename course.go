@@ -31,12 +31,16 @@ func (c *Course) Checkout(noAfterwordFlag bool, tipsFlag bool) {
 			testCaseSeqNum := j + 1
 			outputResult(task.Name(), testCase.Name(), testCaseResult, taskSeqNum, testCaseSeqNum)
 
-			if noAfterwordFlag == false && testCaseResult && testCase.Afterword() != "" {
-				fmt.Println("Test Case Afterword:\n" + testCase.Afterword())
+			if tca, ok := testCase.(Afterword); ok {
+				if noAfterwordFlag == false && testCaseResult {
+					fmt.Println("Test Case Afterword:\n" + tca.Afterword())
+				}
 			}
 
-			if tipsFlag && testCaseResult == false && testCase.Tip() != "" {
-				fmt.Println("Test Case Tips:\n" + testCase.Tip())
+			if tct, ok := testCase.(Tip); ok {
+				if tipsFlag && testCaseResult == false {
+					fmt.Println("Test Case Tips:\n" + tct.Tip())
+				}
 			}
 
 			if testCaseResult == false {
@@ -44,8 +48,10 @@ func (c *Course) Checkout(noAfterwordFlag bool, tipsFlag bool) {
 			}
 		}
 
-		if noAfterwordFlag == false && taskResult && task.Afterword() != "" {
-			fmt.Println("Task Afterword:\n" + task.Afterword())
+		if ta, ok := task.(Afterword); ok {
+			if noAfterwordFlag == false && taskResult {
+				fmt.Println("Task Afterword:\n" + ta.Afterword())
+			}
 		}
 	}
 	fmt.Println("--------------------------------------------------------------------------------")
