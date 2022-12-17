@@ -55,9 +55,10 @@ func Execute(course *Course) {
 			}
 			afterwordFlag := checkoutCmd.Bool("afterword", false, "Shows afterwords if a test or task passed")
 			tipsFlag := checkoutCmd.Bool("tips", false, "Show tips if a test failed")
+			taskFlag := checkoutCmd.String("task", "", "Check a specific task")
 			checkoutCmd.Parse(os.Args[3:])
 
-			course.Check(*afterwordFlag, *tipsFlag)
+			course.Check(*afterwordFlag, *tipsFlag, *taskFlag)
 		default:
 			fmt.Fprintf(flag.CommandLine.Output(), "ERROR: Incorrect command!\n")
 			os.Exit(1)

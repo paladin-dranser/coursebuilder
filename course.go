@@ -18,10 +18,29 @@ func NewCourse(name string, description string, tasks []Task) *Course {
 	}
 }
 
-func (c *Course) Check(afterwordFlag bool, tipsFlag bool) {
+func (c *Course) Check(afterwordFlag bool, tipsFlag bool, taskFlag string) {
+	tasks := c.Tasks
+
+	if taskFlag != "" {
+		found := false
+		for _, task := range tasks {
+			if taskFlag == task.Name() {
+				tasks = []Task{task}
+				found = true
+				break
+			}
+		}
+
+		if found == false {
+			fmt.Println("'" + taskFlag + "' task has not been found in the course. Exiting...")
+			return
+		}
+	}
+
 	fmt.Println("It's time to check what you have done!")
 	fmt.Println("--------------------------------------------------------------------------------")
-	for i, task := range c.Tasks {
+
+	for i, task := range tasks {
 		taskResult := true
 		testCases := task.TestCases()
 		taskSeqNum := i + 1
