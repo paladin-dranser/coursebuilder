@@ -18,23 +18,36 @@ func NewCourse(name string, description string, tasks []Task) *Course {
 	}
 }
 
+type UnknownTaskError string
+
+func (e UnknownTaskError) Error() string {
+	return "task: unknown task " + string(e)
+}
+
+// LookupTask looks up a task by name.
+// if the task cannot be found, the returned error is of type UnknownTaskError
+func (c *Course) LookupTask(name string) (*Task, error) {
+	for _, task := range c.Tasks {
+		if name == task.Name() {
+			return &task, nil
+		}
+	}
+
+	return nil, UnknownTaskError(name)
+}
+
 func (c *Course) Check(afterwordFlag bool, tipsFlag bool, taskFlag string) {
 	tasks := c.Tasks
 
 	if taskFlag != "" {
-		found := false
-		for _, task := range tasks {
-			if taskFlag == task.Name() {
-				tasks = []Task{task}
-				found = true
-				break
-			}
-		}
+		task, err := c.LookupTask(taskFlag)
 
-		if found == false {
-			fmt.Println("'" + taskFlag + "' task has not been found in the course. Exiting...")
+		if err != nil {
+			fmt.Println(err)
 			return
 		}
+
+		tasks = []Task{*task}
 	}
 
 	fmt.Println("It's time to check what you have done!")

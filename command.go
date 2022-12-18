@@ -53,7 +53,7 @@ func Execute(course *Course) {
 					fmt.Fprintf(flag.CommandLine.Output(), "  --"+f.Name+" "+f.Usage+"\n")
 				})
 			}
-			afterwordFlag := checkoutCmd.Bool("afterword", false, "Shows afterwords if a test or task passed")
+			afterwordFlag := checkoutCmd.Bool("afterword", false, "Show afterwords if a test or task passed")
 			tipsFlag := checkoutCmd.Bool("tips", false, "Show tips if a test failed")
 			taskFlag := checkoutCmd.String("task", "", "Check a specific task")
 			checkoutCmd.Parse(os.Args[3:])
