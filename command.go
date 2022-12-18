@@ -85,7 +85,6 @@ func Execute(course *Course) {
 				fmt.Println(task.Name())
 			}
 			return
-			// TODO 'description' as 'flagSet' or 'task name' as a flag
 		} else if args[0] == "description" {
 			if len(args) == 1 {
 				fmt.Println("ERROR: Task name is not provided!")

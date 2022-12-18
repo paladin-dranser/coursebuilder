@@ -27,7 +27,6 @@ type Task interface {
 type TestCase interface {
 	Name() string
 	Description() string
-	// TODO Return err to use it in debug mode
 	Check() bool
 }
 
